@@ -754,6 +754,13 @@ ul, ol { list-style: none; }
   overflow: hidden;
 }
 
+.video-embed {
+  width: 100%;
+  min-height: 480px;
+  border: none;
+  border-radius: var(--radius-xl);
+}
+
 .video-placeholder {
   position: relative;
   aspect-ratio: 16 / 9;
