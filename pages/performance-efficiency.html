@@ -52,7 +52,7 @@
     <p>Effective auto-scaling requires:</p>
     <ul>
       <li><strong>The right metrics.</strong> CPU utilization alone is often misleading. Request latency, queue depth, and custom application metrics give a much better signal of when scaling is actually needed.</li>
-      <li><strong>Appropriate cooldown periods.</strong> Without cooldowns, auto-scaling oscillates &mdash; scaling up and down repeatedly, which is both expensive and destabilizing.</li>
+      <li><strong>Appropriate cooldown periods.</strong> Without cooldowns, auto-scaling oscillates, scaling up and down repeatedly, which is both expensive and destabilizing.</li>
       <li><strong>Predictive scaling.</strong> For workloads with predictable patterns (morning traffic spikes, end-of-month processing), scheduled scaling outperforms reactive scaling every time.</li>
       <li><strong>Graceful scale-down.</strong> Removing instances without draining connections causes errors. Implement connection draining and health check grace periods.</li>
     </ul>
@@ -94,9 +94,9 @@
     <h2>Monitoring: You Can't Optimize What You Can't Measure</h2>
     <p>Performance optimization without monitoring is guesswork. You need three types of observability:</p>
     <ul>
-      <li><strong>Metrics</strong> &mdash; CPU, memory, disk I/O, request latency, error rates. Use CloudWatch, Prometheus, or Datadog. Set baselines and alert on deviations.</li>
-      <li><strong>Traces</strong> &mdash; End-to-end request flows across services. Tools like AWS X-Ray, Jaeger, or Zipkin show exactly where time is spent in distributed systems.</li>
-      <li><strong>Logs</strong> &mdash; Structured, centralized logging with correlation IDs. When something is slow, logs tell you why.</li>
+      <li><strong>Metrics:</strong> CPU, memory, disk I/O, request latency, error rates. Use CloudWatch, Prometheus, or Datadog. Set baselines and alert on deviations.</li>
+      <li><strong>Traces:</strong> End-to-end request flows across services. Tools like AWS X-Ray, Jaeger, or Zipkin show exactly where time is spent in distributed systems.</li>
+      <li><strong>Logs:</strong> Structured, centralized logging with correlation IDs. When something is slow, logs tell you why.</li>
     </ul>
 
     <p>The most valuable metric is P95/P99 latency, not averages. An average response time of 200ms might mask that 5% of your users experience 3-second delays. Those outliers drive user dissatisfaction and churn.</p>

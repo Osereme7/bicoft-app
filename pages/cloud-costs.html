@@ -92,7 +92,7 @@
     <h3>1. Over-Provisioned Resources</h3>
     <p>When teams aren't sure how much compute, memory, or storage they need, they default to "more is safer." A VM that needs 2 vCPUs gets provisioned with 8. A database that handles 100 queries per second is sized for 10,000. This over-provisioning adds up quickly.</p>
 
-    <p>The problem isn't that teams are careless &mdash; it's that right-sizing requires monitoring data that often doesn't exist yet. Without usage baselines, everything is a guess. And guesses tend to err on the expensive side.</p>
+    <p>The problem isn't that teams are careless. It's that right-sizing requires monitoring data that often doesn't exist yet. Without usage baselines, everything is a guess. And guesses tend to err on the expensive side.</p>
 
     <h3>2. Always-On Environments</h3>
     <p>Development, staging, QA, and demo environments often run 24/7 even when nobody is using them. A staging environment that mirrors production can easily cost 50-70% of the production bill. Running it around the clock when it's only used during business hours means you're paying for 16 hours of idle time every day.</p>
@@ -105,7 +105,7 @@
     <h3>3. Poor Workload Architecture</h3>
     <p>Architecture decisions made during initial deployment often don't age well. A monolithic application that should have been broken into microservices keeps scaling vertically (bigger machines) instead of horizontally (more small machines). Data pipelines process everything in real-time when batch processing would cost 90% less. Applications store transient data in expensive managed databases instead of cheap object storage.</p>
 
-    <p>These aren't failures of execution &mdash; they're missed opportunities for optimization that accumulate with scale.</p>
+    <p>These aren't failures of execution. They're missed opportunities for optimization that accumulate with scale.</p>
 
     <h3>4. Lack of Visibility Into Usage</h3>
     <p>You can't optimize what you can't see. Most organizations lack granular cost attribution. They know the total bill, but they can't tell you which team, service, or feature is driving costs. Without tagging standards, cost allocation rules, and regular reviews, waste hides in plain sight.</p>
@@ -121,7 +121,7 @@
     <h2>Practical Strategies That Actually Work</h2>
 
     <h3>Right-Sizing</h3>
-    <p>Analyze actual CPU, memory, and network utilization over 2-4 weeks. Downsize instances that consistently use less than 40% of their allocated resources. Most cloud providers offer right-sizing recommendations &mdash; but they need to be reviewed and acted on regularly, not once.</p>
+    <p>Analyze actual CPU, memory, and network utilization over 2-4 weeks. Downsize instances that consistently use less than 40% of their allocated resources. Most cloud providers offer right-sizing recommendations, but they need to be reviewed and acted on regularly, not once.</p>
 
     <h3>Commitment-Based Discounts</h3>
     <p>Reserved Instances (AWS), Committed Use Discounts (GCP), and Reserved Capacity (Azure) offer 30-60% savings for predictable workloads. The key is matching commitments to actual steady-state usage, not peak usage. Cover your baseline with commitments, handle spikes with on-demand.</p>
