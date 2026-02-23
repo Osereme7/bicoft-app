@@ -117,17 +117,9 @@ ul, ol { list-style: none; }
 }
 
 .loader-icon {
-  width: 60px;
-  height: 40px;
+  height: 100px;
+  width: auto;
   animation: loaderBounce 1.2s ease-in-out infinite;
-}
-
-.loader-text {
-  color: white;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 4px;
 }
 
 @keyframes loaderBounce {
@@ -167,7 +159,7 @@ ul, ol { list-style: none; }
 }
 
 .logo-img {
-  height: 44px;
+  height: 64px;
   width: auto;
 }
 
@@ -181,7 +173,7 @@ ul, ol { list-style: none; }
 }
 
 .footer-logo-img {
-  height: 60px;
+  height: 80px;
   width: auto;
 }
 
