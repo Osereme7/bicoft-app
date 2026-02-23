@@ -163,22 +163,7 @@ ul, ol { list-style: none; }
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 2px;
-  color: var(--white);
   transition: var(--transition);
-}
-
-.navbar.scrolled .nav-logo {
-  color: var(--primary);
-}
-
-.logo-icon {
-  width: 36px;
-  height: 26px;
 }
 
 .logo-img {
@@ -186,8 +171,18 @@ ul, ol { list-style: none; }
   width: auto;
 }
 
+.navbar .nav-logo .logo-img {
+  filter: brightness(0) invert(1);
+  transition: filter 0.3s ease;
+}
+
+.navbar.scrolled .nav-logo .logo-img {
+  filter: none;
+}
+
 .footer-logo-img {
-  height: 48px;
+  height: 60px;
+  width: auto;
 }
 
 .nav-links {
