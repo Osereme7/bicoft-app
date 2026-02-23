@@ -238,39 +238,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (playButton) {
     playButton.addEventListener('click', () => {
       const placeholder = document.getElementById('videoPlaceholder');
-      // Replace with an embedded video or just show an animation
       placeholder.innerHTML = `
-        <div style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-          color: white;
-          gap: 16px;
-          position: relative;
-          z-index: 2;
-        ">
-          <div style="
-            width: 80px;
-            height: 80px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-          "></div>
-          <p style="font-size: 1.1rem; font-weight: 500;">Demo video coming soon</p>
-          <p style="font-size: 0.9rem; opacity: 0.7;">Contact us for a live demonstration</p>
-        </div>
-        <style>
-          @keyframes spin { to { transform: rotate(360deg); } }
-        </style>
-        <div class="video-bg-animation">
-          <div class="vbg-circle vbg-1"></div>
-          <div class="vbg-circle vbg-2"></div>
-          <div class="vbg-circle vbg-3"></div>
-        </div>
+        <iframe
+          src="https://www.instagram.com/reel/DUqgYZIiFh3/embed/"
+          style="width:100%;height:100%;border:none;position:absolute;top:0;left:0;"
+          frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true">
+        </iframe>
       `;
+      placeholder.style.aspectRatio = '9 / 16';
+      placeholder.style.maxHeight = '600px';
+      placeholder.style.maxWidth = '340px';
+      placeholder.style.margin = '0 auto';
+      placeholder.style.background = '#fff';
     });
   }
 

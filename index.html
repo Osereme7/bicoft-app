@@ -227,7 +227,22 @@
       <!-- Video Section -->
       <div class="about-video-section" data-animate="fade-up" data-delay="200">
         <div class="video-wrapper">
-          <iframe src="https://www.instagram.com/reel/DUqgYZIiFh3/embed/" class="video-embed" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true"></iframe>
+          <div class="video-placeholder" id="videoPlaceholder">
+            <div class="video-overlay" id="videoOverlay">
+              <button class="play-button" id="playButton" aria-label="Play video">
+                <svg viewBox="0 0 64 64" fill="none">
+                  <circle cx="32" cy="32" r="31" stroke="white" stroke-width="2"/>
+                  <path d="M26 20L44 32L26 44V20Z" fill="white"/>
+                </svg>
+              </button>
+              <span class="video-caption">See how we help businesses transform</span>
+            </div>
+            <div class="video-bg-animation">
+              <div class="vbg-circle vbg-1"></div>
+              <div class="vbg-circle vbg-2"></div>
+              <div class="vbg-circle vbg-3"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
