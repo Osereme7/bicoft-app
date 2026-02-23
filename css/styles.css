@@ -181,6 +181,17 @@ ul, ol { list-style: none; }
   height: 26px;
 }
 
+.logo-img {
+  height: 36px;
+  width: auto;
+  border-radius: 4px;
+}
+
+.footer-logo-img {
+  height: 40px;
+  border-radius: 6px;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
