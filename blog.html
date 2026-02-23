@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Insights & Case Studies | Bicoft Blog - Cloud Consulting Nigeria</title>
+  <meta name="description" content="Expert cloud insights, DevOps best practices, and real-world case studies from Bicoft. Learn about cloud security, cost optimization, migration strategies, and infrastructure engineering in Africa.">
+  <meta name="keywords" content="cloud blog Nigeria, DevOps insights Africa, cloud consulting blog, AWS best practices, cloud migration tips, cloud security articles, Bicoft insights, cloud cost optimization">
+  <link rel="canonical" href="https://www.bicoft.com/blog.html">
+  <meta property="og:title" content="Cloud Insights & Case Studies | Bicoft Blog">
+  <meta property="og:description" content="Expert cloud insights, DevOps best practices, and real-world case studies from Bicoft.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.bicoft.com/blog.html">
+  <meta property="og:image" content="https://www.bicoft.com/images/og-image.png">
+  <meta property="og:site_name" content="Bicoft">
+  <meta property="og:locale" content="en_NG">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cloud Insights & Case Studies | Bicoft Blog">
+  <meta name="twitter:description" content="Expert cloud insights, DevOps best practices, and real-world case studies from Bicoft.">
+  <meta name="twitter:image" content="https://www.bicoft.com/images/og-image.png">
+  <meta name="robots" content="index, follow">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Bicoft Cloud Insights",
+    "description": "Expert cloud insights, DevOps best practices, and real-world case studies from Nigeria's leading cloud consulting firm.",
+    "url": "https://www.bicoft.com/blog.html",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Bicoft",
+      "logo": {"@type": "ImageObject", "url": "https://www.bicoft.com/images/logo-horizontal-blue.png"}
+    }
+  }
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <style>
+    .blog-index-hero{background:linear-gradient(135deg,#1E3A8A,#2563EB,#0891B2);padding:140px 0 80px;color:#fff;position:relative;overflow:hidden}
+    .blog-index-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(96,165,250,.3),transparent 60%)}
+    .blog-index-hero .container{position:relative;z-index:1;text-align:center}
+    .blog-index-hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;margin-bottom:16px}
+    .blog-index-hero p{font-size:1.15rem;opacity:.85;max-width:600px;margin:0 auto;line-height:1.7}
+    .blog-index-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);box-shadow:0 1px 20px rgba(0,0,0,.08);padding:12px 0}
+    .blog-index-nav .container{display:flex;align-items:center;justify-content:space-between}
+    .blog-index-nav .nav-logo{display:flex;align-items:center}
+    .blog-index-nav .logo-img{height:36px;width:auto}
+    .blog-index-nav .back-link{font-size:.9rem;font-weight:600;color:#2563EB;display:flex;align-items:center;gap:6px;text-decoration:none}
+
+    .blog-filter{display:flex;gap:10px;justify-content:center;margin:48px 0 40px;flex-wrap:wrap}
+    .blog-filter-btn{padding:8px 20px;border-radius:9999px;font-size:.85rem;font-weight:600;border:1px solid #E5E7EB;background:#fff;color:#6B7280;cursor:pointer;transition:all .2s}
+    .blog-filter-btn:hover,.blog-filter-btn.active{background:#2563EB;color:#fff;border-color:#2563EB}
+
+    .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding-bottom:80px}
+    .blog-card{background:#fff;border-radius:16px;border:1px solid #E5E7EB;overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s}
+    .blog-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px -8px rgba(0,0,0,.12)}
+    .blog-card-img{height:180px;position:relative;overflow:hidden}
+    .blog-card-img .tag{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);padding:4px 12px;border-radius:6px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1E3A8A}
+    .blog-card-body{padding:24px}
+    .blog-card-date{font-size:.78rem;color:#9CA3AF;font-weight:500;margin-bottom:8px}
+    .blog-card-body h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#111827;line-height:1.35;margin-bottom:10px}
+    .blog-card-body p{font-size:.88rem;color:#6B7280;line-height:1.6;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .blog-card-link{font-size:.85rem;font-weight:600;color:#2563EB;display:inline-flex;align-items:center;gap:6px}
+    .blog-card:hover .blog-card-link{gap:10px}
+
+    .blog-card.featured{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}
+    .blog-card.featured .blog-card-img{height:100%}
+    .blog-card.featured .blog-card-body{padding:36px;display:flex;flex-direction:column;justify-content:center}
+    .blog-card.featured h3{font-size:1.4rem}
+
+    .blog-footer{text-align:center;padding:40px 24px;border-top:1px solid #E5E7EB;color:#9CA3AF;font-size:.85rem}
+    .blog-footer a{color:#2563EB;text-decoration:none;font-weight:600}
+
+    @media(max-width:768px){
+      .blog-grid{grid-template-columns:1fr}
+      .blog-card.featured{grid-template-columns:1fr}
+      .blog-card.featured .blog-card-img{height:200px}
+    }
+    @media(min-width:769px) and (max-width:1024px){
+      .blog-grid{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="blog-index-nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="images/logo-horizontal-blue.png" class="logo-img" alt="Bicoft"></a>
+      <a href="index.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Home
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="blog-index-hero">
+    <div class="container">
+      <h1>Cloud Insights & Case Studies</h1>
+      <p>Expert perspectives on cloud architecture, DevOps, security, and cost optimization from Nigeria's cloud consulting team.</p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <div class="container">
+
+    <!-- Filter -->
+    <div class="blog-filter">
+      <button class="blog-filter-btn active" data-filter="all">All</button>
+      <button class="blog-filter-btn" data-filter="case-study">Case Studies</button>
+      <button class="blog-filter-btn" data-filter="security">Security</button>
+      <button class="blog-filter-btn" data-filter="cost">Cost</button>
+      <button class="blog-filter-btn" data-filter="migration">Migration</button>
+      <button class="blog-filter-btn" data-filter="infrastructure">Infrastructure</button>
+      <button class="blog-filter-btn" data-filter="performance">Performance</button>
+    </div>
+
+    <!-- Blog Grid -->
+    <div class="blog-grid">
+
+      <!-- Featured: Case Study -->
+      <a href="pages/ddos-mitigation.html" class="blog-card featured" data-category="case-study security">
+        <div class="blog-card-img" style="background:linear-gradient(135deg,#0A0E27,#1E3A8A);">
+          <span class="tag">Case Study</span>
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;padding:40px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5" style="width:80px;height:80px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="blog-card-body">
+          <span class="blog-card-date">February 2026 &bull; Case Study</span>
+          <h3>How We Neutralized DDoS & Slowloris Attacks on AWS Using Cloudflare + Terraform</h3>
+          <p>An e-commerce client was losing revenue to sophisticated Layer 7 attacks. We engineered automated, adaptive cloud security using Cloudflare edge protection and Terraform-managed WAF policies. 99% of malicious traffic blocked within 48 hours.</p>
+          <span class="blog-card-link">Read Case Study <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </a>
+
+      <!-- Cloud Trends -->
+      <a href="pages/cloud-trends.html" class="blog-card" data-category="infrastructure">
+        <div class="blog-card-img" style="background:linear-gradient(135deg,#1E3A8A,#3B82F6);">
+          <span class="tag">Trends</span>
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+            <svg viewBox="0 0 80 80" fill="none" style="width:60px;height:60px;"><path d="M20 55V35" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round"/><path d="M35 55V25" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round"/><path d="M50 55V40" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round"/><path d="M65 55V20" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="blog-card-body">
+          <span class="blog-card-date">February 15, 2026 &bull; 10 min read</span>
+          <h3>Emerging Trends in Cloud Adoption</h3>
+          <p>From AI-driven infrastructure to hybrid and multi-cloud strategies, explore the cloud trends shaping the next 3 years.</p>
+          <span class="blog-card-link">Read More <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </a>
+
+      <!-- Cloud Costs -->
+      <a href="pages/cloud-costs.html" class="blog-card" data-category="cost">
+        <div class="blog-card-img" style="background:linear-gradient(135deg,#065F46,#10B981);">
+          <span class="tag">Cost</span>
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+            <svg viewBox="0 0 80 80" fill="none" style="width:60px;height:60px;"><path d="M40 15V65M50 25H35C31 25 28 28 28 32C28 36 31 39 35 39H45C49 39 52 42 52 46C52 50 49 53 45 53H28" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="blog-card-body">
+          <span class="blog-card-date">February 12, 2026 &bull; 9 min read</span>
+          <h3>Why Cloud Bills Keep Rising</h3>
+          <p>Cloud cost overruns are rarely accidental. Learn the structural causes behind rising cloud bills and practical strategies to fix them.</p>
+          <span class="blog-card-link">Read More <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </a>
+
+      <!-- Cloud Security -->
+      <a href="pages/cloud-security.html" class="blog-card" data-category="security">
+        <div class="blog-card-img" style="background:linear-gradient(135deg,#7F1D1D,#DC2626);">
+          <span class="tag">Security</span>
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+            <svg viewBox="0 0 80 80" fill="none" style="width:60px;height:60px;"><path d="M40 10L15 22V38C15 54 40 66 40 66C40 66 65 54 65 38V22L40 10Z" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linejoin="round"/><path d="M30 40L37 47L52 32" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="blog-card-body">
+          <span class="blog-card-date">February 10, 2026 &bull; 8 min read</span>
+          <h3>How Secure Is Your Cloud Infrastructure Really?</h3>
+          <p>Security issues often come from architectural gaps, not missing tools. A well-designed cloud setup reduces risk and improves resilience.</p>
+          <span class="blog-card-link">Read More <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </a>
+
+      <!-- Cloud Migration -->
+      <a href="pages/cloud-migration.html" class="blog-card" data-category="migration">
+        <div class="blog-card-img" style="background:linear-gradient(135deg,#4C1D95,#7C3AED);">
+          <span class="tag">Migration</span>
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+            <svg viewBox="0 0 80 80" fill="none" style="width:60px;height:60px;"><rect x="15" y="25" width="22" height="35" rx="3" stroke="rgba(255,255,255,.6)" stroke-width="2.5"/><path d="M45 42H60M60 42L55 37M60 42L55 47" stroke="rgba(255,255,255,.6)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M55 28C50 28 47 31 46.5 35H46C43 35 41 37.5 41 40.5C41 43.5 43 46 46 46H64C67 46 69 43.5 69 40.5C69 37.5 67 35 64 35H63.5C63 31 60 28 55 28Z" stroke="rgba(255,255,255,.6)" stroke-width="2.5"/></svg>
+          </div>
+        </div>
+        <div class="blog-card-body">
+          <span class="blog-card-date">February 8, 2026 &bull; 12 min read</span>
+          <h3>Speed vs Strategy in Cloud Migration</h3>
+          <p>Cloud migrations succeed when architecture, cost, and scalability are planned first, not when they're rushed to meet a deadline.</p>
+          <span class="blog-card-link">Read More <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </a>
+
+      <!-- NAT Gateways -->
+      <a href="pages/nat-gateways.html" class="blog-card" data-category="infrastructure cost">
+        <div class="blog-card-img" style="background:linear-gradient(135deg,#1E3A5F,#0891B2);">
+          <span class="tag">Infrastructure</span>
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+            <svg viewBox="0 0 80 80" fill="none" style="width:60px;height:60px;"><rect x="10" y="30" width="25" height="20" rx="3" stroke="rgba(255,255,255,.6)" stroke-width="2.5"/><rect x="45" y="30" width="25" height="20" rx="3" stroke="rgba(255,255,255,.6)" stroke-width="2.5"/><path d="M35 40H45" stroke="rgba(255,255,255,.6)" stroke-width="2.5" stroke-linecap="round"/><circle cx="40" cy="40" r="6" stroke="rgba(255,255,255,.6)" stroke-width="2"/></svg>
+          </div>
+        </div>
+        <div class="blog-card-body">
+          <span class="blog-card-date">January 28, 2026 &bull; 7 min read</span>
+          <h3>NAT Gateways Explained</h3>
+          <p>What they do, when you need them, and when they become a hidden cost that quietly inflates your cloud bill.</p>
+          <span class="blog-card-link">Read More <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </a>
+
+      <!-- Performance -->
+      <a href="pages/performance-efficiency.html" class="blog-card" data-category="performance">
+        <div class="blog-card-img" style="background:linear-gradient(135deg,#312E81,#6366F1);">
+          <span class="tag">Performance</span>
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+            <svg viewBox="0 0 80 80" fill="none" style="width:60px;height:60px;"><path d="M20 60L30 40L40 50L50 25L60 35" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="25" r="4" fill="rgba(255,255,255,.6)"/></svg>
+          </div>
+        </div>
+        <div class="blog-card-body">
+          <span class="blog-card-date">January 20, 2026 &bull; 9 min read</span>
+          <h3>Performance Efficiency in the Cloud</h3>
+          <p>Scaling without slowing down. Build cloud systems that maintain speed, reliability, and cost efficiency as workloads grow.</p>
+          <span class="blog-card-link">Read More <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="blog-footer">
+    <p>&copy; 2026 <a href="index.html">Bicoft</a>. Cloud Consulting &bull; Lagos, Nigeria</p>
+  </div>
+
+  <script>
+    // Blog filter functionality
+    document.querySelectorAll('.blog-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.blog-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.blog-card').forEach(card => {
+          if (filter === 'all' || card.dataset.category.includes(filter)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
