@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DDoS & Slowloris Mitigation Case Study - Bicoft</title>
+  <meta name="description" content="How Bicoft neutralized DDoS and Slowloris attacks on AWS using Cloudflare edge protection and Terraform-managed WAF automation.">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:#1F2937;background:#fff;overflow-x:hidden}
+
+    /* --- Nav --- */
+    .cs-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);box-shadow:0 1px 20px rgba(0,0,0,.08);padding:12px 0}
+    .cs-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+    .cs-nav .nav-logo{display:flex;align-items:center}
+    .cs-nav .logo-img{height:36px;width:auto}
+    .cs-nav .back-link{font-size:.9rem;font-weight:600;color:#2563EB;display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .2s}
+    .cs-nav .back-link:hover{opacity:.7}
+
+    /* --- Hero --- */
+    .cs-hero{position:relative;padding:160px 0 100px;overflow:hidden;background:#0A0E27}
+    .cs-hero::before{content:'';position:absolute;inset:0;background:
+      radial-gradient(ellipse at 20% 50%,rgba(37,99,235,.25),transparent 50%),
+      radial-gradient(ellipse at 80% 30%,rgba(239,68,68,.15),transparent 50%),
+      radial-gradient(ellipse at 50% 80%,rgba(6,182,212,.1),transparent 40%)}
+    .cs-hero .container{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 24px}
+    .cs-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .cs-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);padding:6px 16px;border-radius:9999px;font-size:.8rem;font-weight:600;color:#FCA5A5;margin-bottom:24px;letter-spacing:.5px}
+    .cs-badge-dot{width:8px;height:8px;border-radius:50%;background:#EF4444;animation:pulse-dot 2s infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+    .cs-hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;color:#fff;line-height:1.15;margin-bottom:20px}
+    .cs-hero h1 span{background:linear-gradient(135deg,#60A5FA,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .cs-hero-sub{font-size:1.1rem;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:36px;max-width:500px}
+    .cs-hero-tags{display:flex;flex-wrap:wrap;gap:8px}
+    .cs-hero-tag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:6px 14px;border-radius:8px;font-size:.78rem;color:rgba(255,255,255,.7);font-weight:500}
+
+    /* Hero visual */
+    .cs-hero-visual{position:relative;display:flex;align-items:center;justify-content:center}
+    .cs-shield{width:280px;height:280px;position:relative}
+    .cs-shield-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,99,235,.3);animation:shield-rotate 20s linear infinite}
+    .cs-shield-ring:nth-child(2){inset:20px;border-color:rgba(6,182,212,.2);animation-direction:reverse;animation-duration:15s}
+    .cs-shield-ring:nth-child(3){inset:40px;border-color:rgba(37,99,235,.15)}
+    @keyframes shield-rotate{to{transform:rotate(360deg)}}
+    .cs-shield-center{position:absolute;inset:60px;background:linear-gradient(135deg,rgba(37,99,235,.2),rgba(6,182,212,.15));border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1)}
+    .cs-shield-center svg{width:64px;height:64px;color:#60A5FA}
+    .cs-attack-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:#EF4444;box-shadow:0 0 20px rgba(239,68,68,.6);animation:attack-move 3s linear infinite}
+    .cs-attack-dot:nth-child(5){top:10%;left:0;animation-delay:0s}
+    .cs-attack-dot:nth-child(6){top:60%;left:-5%;animation-delay:.7s}
+    .cs-attack-dot:nth-child(7){top:30%;right:0;animation-delay:1.4s}
+    .cs-attack-dot:nth-child(8){bottom:10%;right:10%;animation-delay:2.1s}
+    @keyframes attack-move{0%{opacity:0;transform:scale(0)}30%{opacity:1;transform:scale(1.2)}60%{opacity:.6;transform:scale(.8)}100%{opacity:0;transform:scale(0)}}
+
+    /* --- Client Card --- */
+    .cs-client{background:linear-gradient(135deg,#F8FAFF,#EFF6FF);border:1px solid #DBEAFE;border-radius:20px;padding:40px;margin-top:-60px;position:relative;z-index:2;max-width:1200px;margin-left:auto;margin-right:auto}
+    .cs-client-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+    .cs-client-item{text-align:center}
+    .cs-client-label{font-size:.75rem;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+    .cs-client-value{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#1E3A8A}
+
+    /* --- Section base --- */
+    .cs-section{max-width:900px;margin:0 auto;padding:80px 24px}
+    .cs-section-wide{max-width:1200px}
+    .cs-section-label{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px}
+    .cs-section h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:#111827;line-height:1.25;margin-bottom:20px}
+    .cs-section p{color:#4B5563;font-size:1.05rem;line-height:1.8;margin-bottom:16px}
+
+    /* --- Challenge --- */
+    .cs-challenge-bg{background:#FAFAFA}
+    .cs-impact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px}
+    .cs-impact-card{background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:24px;display:flex;align-items:flex-start;gap:16px;transition:transform .2s,box-shadow .2s}
+    .cs-impact-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px -5px rgba(0,0,0,.08)}
+    .cs-impact-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .cs-impact-icon.red{background:rgba(239,68,68,.1);color:#EF4444}
+    .cs-impact-icon.amber{background:rgba(245,158,11,.1);color:#F59E0B}
+    .cs-impact-icon.purple{background:rgba(124,58,237,.1);color:#7C3AED}
+    .cs-impact-icon.blue{background:rgba(37,99,235,.1);color:#2563EB}
+    .cs-impact-card h4{font-size:.95rem;font-weight:700;color:#111827;margin-bottom:4px}
+    .cs-impact-card p{font-size:.85rem;color:#6B7280;margin:0;line-height:1.5}
+
+    /* --- Strategy --- */
+    .cs-strategy-pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+    .cs-pill{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #E5E7EB;padding:14px 20px;border-radius:12px;font-size:.9rem;font-weight:600;color:#374151;transition:all .2s}
+    .cs-pill:hover{border-color:#2563EB;box-shadow:0 4px 15px rgba(37,99,235,.1)}
+    .cs-pill-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2563EB,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+    .cs-pill-icon svg{width:18px;height:18px}
+
+    /* --- Steps --- */
+    .cs-steps{counter-reset:step-counter}
+    .cs-step{position:relative;padding:48px 0;border-bottom:1px solid #F3F4F6}
+    .cs-step:last-child{border-bottom:none}
+    .cs-step-header{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+    .cs-step-num{counter-increment:step-counter;width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#1E3A8A,#2563EB);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;flex-shrink:0}
+    .cs-step-num::after{content:counter(step-counter)}
+    .cs-step h3{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;color:#111827}
+    .cs-step p{color:#4B5563;font-size:1.02rem;line-height:1.8;margin-bottom:12px}
+    .cs-step-highlight{background:linear-gradient(135deg,#EFF6FF,#F0F9FF);border-left:4px solid #2563EB;border-radius:0 12px 12px 0;padding:20px 24px;margin:24px 0}
+    .cs-step-highlight p{color:#1E3A8A;font-weight:600;font-size:.95rem;margin:0}
+
+    /* --- WAF Rules Visual --- */
+    .cs-waf-grid{display:grid;gap:16px;margin-top:28px}
+    .cs-waf-card{display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:14px;border:1px solid}
+    .cs-waf-card.high{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.15)}
+    .cs-waf-card.med{background:rgba(245,158,11,.04);border-color:rgba(245,158,11,.15)}
+    .cs-waf-card.low{background:rgba(16,185,129,.04);border-color:rgba(16,185,129,.15)}
+    .cs-waf-badge{padding:4px 10px;border-radius:6px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+    .cs-waf-card.high .cs-waf-badge{background:rgba(239,68,68,.12);color:#DC2626}
+    .cs-waf-card.med .cs-waf-badge{background:rgba(245,158,11,.12);color:#D97706}
+    .cs-waf-card.low .cs-waf-badge{background:rgba(16,185,129,.12);color:#059669}
+    .cs-waf-rules{display:flex;flex-direction:column;gap:6px}
+    .cs-waf-rules span{font-size:.88rem;color:#4B5563;display:flex;align-items:center;gap:8px}
+    .cs-waf-rules span::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+    .cs-waf-card.high .cs-waf-rules span::before{background:#EF4444}
+    .cs-waf-card.med .cs-waf-rules span::before{background:#F59E0B}
+    .cs-waf-card.low .cs-waf-rules span::before{background:#10B981}
+
+    /* --- Results --- */
+    .cs-results-bg{background:#0A0E27;color:#fff}
+    .cs-results-bg .cs-section-label{color:#60A5FA}
+    .cs-results-bg h2{color:#fff}
+    .cs-results-bg p{color:rgba(255,255,255,.65)}
+    .cs-results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:40px}
+    .cs-result-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px 24px;text-align:center;transition:transform .2s,background .2s}
+    .cs-result-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.08)}
+    .cs-result-num{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:4px;line-height:1}
+    .cs-result-num.blue{color:#60A5FA}
+    .cs-result-num.green{color:#34D399}
+    .cs-result-num.cyan{color:#22D3EE}
+    .cs-result-num.purple{color:#A78BFA}
+    .cs-result-label{font-size:.85rem;color:rgba(255,255,255,.5);font-weight:500}
+    .cs-result-quote{margin-top:48px;text-align:center;max-width:700px;margin-left:auto;margin-right:auto}
+    .cs-result-quote p{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:600;color:rgba(255,255,255,.85);line-height:1.6;font-style:italic}
+    .cs-result-quote p::before{content:'\201C';font-size:3rem;line-height:0;vertical-align:-0.4em;color:#2563EB;margin-right:4px}
+
+    /* --- Business Impact --- */
+    .cs-biz-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:32px}
+    .cs-biz-card{background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:28px;transition:transform .2s,box-shadow .2s}
+    .cs-biz-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px -8px rgba(0,0,0,.1)}
+    .cs-biz-card h4{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:#111827;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+    .cs-biz-card h4 svg{width:20px;height:20px;color:#2563EB;flex-shrink:0}
+    .cs-biz-card p{font-size:.9rem;color:#6B7280;line-height:1.6;margin:0}
+
+    /* --- Why It Matters --- */
+    .cs-why-bg{background:linear-gradient(135deg,#EFF6FF,#F0F9FF)}
+    .cs-why-list{display:grid;gap:12px;margin-top:28px}
+    .cs-why-item{display:flex;align-items:center;gap:14px;background:#fff;padding:18px 22px;border-radius:12px;border:1px solid #DBEAFE;font-size:.95rem;font-weight:600;color:#1E3A8A;transition:transform .2s}
+    .cs-why-item:hover{transform:translateX(4px)}
+    .cs-why-item svg{width:22px;height:22px;color:#2563EB;flex-shrink:0}
+
+    /* --- CTA --- */
+    .cs-cta{background:linear-gradient(135deg,#1E3A8A,#2563EB);border-radius:24px;padding:56px;text-align:center;margin:0 24px}
+    .cs-cta h2{color:#fff;margin-bottom:12px}
+    .cs-cta p{color:rgba(255,255,255,.8);max-width:550px;margin:0 auto 28px}
+    .cs-cta-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#1E3A8A;padding:16px 36px;border-radius:12px;font-weight:700;font-size:1rem;text-decoration:none;transition:all .2s;box-shadow:0 4px 15px rgba(0,0,0,.15)}
+    .cs-cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.2)}
+
+    /* --- Footer spacer --- */
+    .cs-footer{text-align:center;padding:40px 24px;border-top:1px solid #E5E7EB;color:#9CA3AF;font-size:.85rem}
+    .cs-footer a{color:#2563EB;text-decoration:none;font-weight:600}
+
+    /* --- Responsive --- */
+    @media(max-width:768px){
+      .cs-hero-grid{grid-template-columns:1fr;gap:40px;text-align:center}
+      .cs-hero-sub{margin-left:auto;margin-right:auto}
+      .cs-hero-tags{justify-content:center}
+      .cs-hero-visual{order:-1}
+      .cs-shield{width:200px;height:200px}
+      .cs-shield-center{inset:40px}
+      .cs-shield-center svg{width:44px;height:44px}
+      .cs-client{margin-top:-30px;padding:24px}
+      .cs-client-inner{grid-template-columns:1fr 1fr;gap:20px}
+      .cs-impact-grid{grid-template-columns:1fr}
+      .cs-results-grid{grid-template-columns:1fr 1fr}
+      .cs-biz-grid{grid-template-columns:1fr}
+      .cs-step-header{flex-direction:column;align-items:flex-start;gap:12px}
+      .cs-cta{padding:36px 24px;margin:0 16px}
+    }
+    @media(max-width:480px){
+      .cs-client-inner{grid-template-columns:1fr}
+      .cs-results-grid{grid-template-columns:1fr}
+    }
+
+    /* Scroll animations */
+    .cs-animate{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+    .cs-animate.visible{opacity:1;transform:translateY(0)}
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="cs-nav">
+    <div class="container">
+      <a href="../index.html" class="nav-logo"><img src="../images/logo-horizontal-blue.png" class="logo-img" alt="Bicoft"></a>
+      <a href="../index.html#case-studies" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All Case Studies
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="cs-hero">
+    <div class="container">
+      <div class="cs-hero-grid">
+        <div>
+          <div class="cs-badge"><span class="cs-badge-dot"></span> Security Case Study</div>
+          <h1>Neutralizing DDoS & Slowloris Attacks on <span>AWS</span></h1>
+          <p class="cs-hero-sub">How we engineered automated, adaptive cloud security using Cloudflare edge protection and Terraform-managed WAF policies.</p>
+          <div class="cs-hero-tags">
+            <span class="cs-hero-tag">AWS</span>
+            <span class="cs-hero-tag">Cloudflare</span>
+            <span class="cs-hero-tag">Terraform</span>
+            <span class="cs-hero-tag">WAF</span>
+            <span class="cs-hero-tag">DDoS Mitigation</span>
+          </div>
+        </div>
+        <div class="cs-hero-visual">
+          <div class="cs-shield">
+            <div class="cs-shield-ring"></div>
+            <div class="cs-shield-ring"></div>
+            <div class="cs-shield-ring"></div>
+            <div class="cs-shield-center">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="cs-attack-dot"></div>
+            <div class="cs-attack-dot"></div>
+            <div class="cs-attack-dot"></div>
+            <div class="cs-attack-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Client Profile -->
+  <div class="container" style="padding:0 24px;">
+    <div class="cs-client cs-animate">
+      <div class="cs-client-inner">
+        <div class="cs-client-item">
+          <div class="cs-client-label">Industry</div>
+          <div class="cs-client-value">E-Commerce</div>
+        </div>
+        <div class="cs-client-item">
+          <div class="cs-client-label">Infrastructure</div>
+          <div class="cs-client-value">Hosted on AWS</div>
+        </div>
+        <div class="cs-client-item">
+          <div class="cs-client-label">Architecture</div>
+          <div class="cs-client-value">ALB + Auto Scaling + Private Subnets</div>
+        </div>
+        <div class="cs-client-item">
+          <div class="cs-client-label">Traffic Profile</div>
+          <div class="cs-client-value">High-Growth, Public-Facing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Challenge -->
+  <section class="cs-challenge-bg">
+    <div class="cs-section cs-animate">
+      <div class="cs-section-label" style="color:#EF4444;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        The Challenge
+      </div>
+      <h2>Sophisticated Attacks Were Crippling the Business</h2>
+      <p>Our client began experiencing repeated Layer 7 DDoS attacks and Slowloris attacks targeting open HTTP connections. While AWS provides foundational protection, these attack patterns were sophisticated enough to bypass standard defenses.</p>
+      <p>The Slowloris attack in particular held connections open, exhausting backend resources without triggering traditional volumetric alarms.</p>
+
+      <div class="cs-impact-grid">
+        <div class="cs-impact-card">
+          <div class="cs-impact-icon red">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+          </div>
+          <div>
+            <h4>Checkout Failures</h4>
+            <p>Users unable to complete purchases during peak traffic hours</p>
+          </div>
+        </div>
+        <div class="cs-impact-card">
+          <div class="cs-impact-icon amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          </div>
+          <div>
+            <h4>Revenue Loss</h4>
+            <p>Significant revenue impact during peak business hours from downtime</p>
+          </div>
+        </div>
+        <div class="cs-impact-card">
+          <div class="cs-impact-icon purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <div>
+            <h4>Brand Trust Erosion</h4>
+            <p>Customer confidence dropping due to intermittent availability</p>
+          </div>
+        </div>
+        <div class="cs-impact-card">
+          <div class="cs-impact-icon blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div>
+            <h4>Cost Inflation</h4>
+            <p>Auto scaling reacting to malicious traffic, inflating infrastructure costs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Strategy -->
+  <section>
+    <div class="cs-section cs-animate">
+      <div class="cs-section-label" style="color:#2563EB;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        Our Strategy
+      </div>
+      <h2>Layered, Automated Defense Architecture</h2>
+      <p>We designed a layered, automated defense model that shifts security from reactive firefighting to proactive automated defense. This was not just protection &mdash; it was automated, adaptive security engineering.</p>
+
+      <div class="cs-strategy-pills">
+        <div class="cs-pill">
+          <div class="cs-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          AWS Metric Intelligence
+        </div>
+        <div class="cs-pill">
+          <div class="cs-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          Cloudflare Edge Protection
+        </div>
+        <div class="cs-pill">
+          <div class="cs-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          Terraform-Managed WAF
+        </div>
+        <div class="cs-pill">
+          <div class="cs-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          Programmatic Rule Enforcement
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Steps -->
+  <section class="cs-challenge-bg">
+    <div class="cs-section cs-steps">
+
+      <!-- Step 1 -->
+      <div class="cs-step cs-animate">
+        <div class="cs-step-header">
+          <div class="cs-step-num"></div>
+          <h3>Detecting Attacks Using ALB Metrics</h3>
+        </div>
+        <p>We configured intelligent thresholds on ActiveConnectionCount, NewConnectionCount, RequestCount, and TargetResponseTime. When abnormal spikes exceeded defined baselines, CloudWatch triggered automated workflows.</p>
+        <div class="cs-step-highlight">
+          <p>Instead of reacting manually, the system switched protection modes instantly. Zero human intervention required.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="cs-step cs-animate">
+        <div class="cs-step-header">
+          <div class="cs-step-num"></div>
+          <h3>Programmatic "Under Attack Mode" Activation</h3>
+        </div>
+        <p>Using Cloudflare's API, we built automation that automatically enabled "Under Attack Mode" during anomaly detection, forced JavaScript challenge validation for suspicious traffic, and blocked bots before they reached AWS.</p>
+        <p>When metrics stabilized, the system reverted to standard protection automatically.</p>
+        <div class="cs-step-highlight">
+          <p>Malicious request penetration reduced to near-zero. Zero manual intervention. Zero panic mode.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="cs-step cs-animate">
+        <div class="cs-step-header">
+          <div class="cs-step-num"></div>
+          <h3>Terraform-Based WAF Rule Engineering</h3>
+        </div>
+        <p>We built a tiered WAF structure in Cloudflare using Terraform with priority segmentation, ensuring deterministic rule execution, clear visibility into security posture, and Infrastructure-as-Code compliance.</p>
+
+        <div class="cs-waf-grid">
+          <div class="cs-waf-card high">
+            <span class="cs-waf-badge">High Priority</span>
+            <div class="cs-waf-rules">
+              <span>Known malicious IP ranges</span>
+              <span>Rate-limiting aggressive IPs</span>
+              <span>Blocking suspicious user agents</span>
+              <span>Geo-based restrictions</span>
+            </div>
+          </div>
+          <div class="cs-waf-card med">
+            <span class="cs-waf-badge">Medium Priority</span>
+            <div class="cs-waf-rules">
+              <span>Suspicious header patterns</span>
+              <span>Abnormal request frequency patterns</span>
+              <span>Excessive concurrent connections (Slowloris indicators)</span>
+            </div>
+          </div>
+          <div class="cs-waf-card low">
+            <span class="cs-waf-badge">Low Priority</span>
+            <div class="cs-waf-rules">
+              <span>Managed rule sets</span>
+              <span>Bot score thresholds</span>
+              <span>Application-level anomaly checks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="cs-step cs-animate">
+        <div class="cs-step-header">
+          <div class="cs-step-num"></div>
+          <h3>Slowloris Mitigation</h3>
+        </div>
+        <p>Slowloris attacks work by keeping connections open indefinitely. We mitigated this by enforcing aggressive connection timeout policies at the edge, configuring Cloudflare to validate client behavior before proxying, limiting concurrent connections per IP, and blocking incomplete HTTP headers.</p>
+        <div class="cs-step-highlight">
+          <p>The backend never saw the malicious open connections. The attack was neutralized at the edge.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="cs-results-bg">
+    <div class="cs-section cs-section-wide cs-animate">
+      <div style="text-align:center;">
+        <div class="cs-section-label">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Results
+        </div>
+        <h2>Deployed in 48 Hours. Impact Immediate.</h2>
+      </div>
+
+      <div class="cs-results-grid">
+        <div class="cs-result-card">
+          <div class="cs-result-num blue">99%</div>
+          <div class="cs-result-label">Malicious traffic blocked</div>
+        </div>
+        <div class="cs-result-card">
+          <div class="cs-result-num green">Zero</div>
+          <div class="cs-result-label">Downtime during attacks</div>
+        </div>
+        <div class="cs-result-card">
+          <div class="cs-result-num cyan">32%</div>
+          <div class="cs-result-label">Infrastructure cost reduction</div>
+        </div>
+        <div class="cs-result-card">
+          <div class="cs-result-num purple">Faster</div>
+          <div class="cs-result-label">Page load times from cleaner traffic</div>
+        </div>
+      </div>
+
+      <div class="cs-result-quote">
+        <p>Security shifted from reactive firefighting to proactive automated defense.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Impact -->
+  <section>
+    <div class="cs-section cs-animate">
+      <div class="cs-section-label" style="color:#10B981;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Business Impact
+      </div>
+      <h2>More Than Protection &mdash; Engineered Resilience</h2>
+      <p>Instead of just "adding a WAF," we engineered a complete automated defense system that the client can confidently rely on during peak traffic &mdash; even under active attack conditions.</p>
+
+      <div class="cs-biz-grid">
+        <div class="cs-biz-card">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Automated Adaptive Defense
+          </h4>
+          <p>Self-adjusting security posture that responds to threats in real-time without human intervention.</p>
+        </div>
+        <div class="cs-biz-card">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            Cost-Efficient Protection
+          </h4>
+          <p>32% reduction in autoscaling costs by filtering malicious traffic before it reaches AWS infrastructure.</p>
+        </div>
+        <div class="cs-biz-card">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Infrastructure-as-Code Security
+          </h4>
+          <p>All WAF policies version-controlled via Terraform &mdash; auditable, repeatable, and scalable.</p>
+        </div>
+        <div class="cs-biz-card">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Real-Time Attack Response
+          </h4>
+          <p>From detection to mitigation in seconds, not hours. The system operates confidently 24/7.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why This Matters -->
+  <section class="cs-why-bg">
+    <div class="cs-section cs-animate">
+      <div class="cs-section-label" style="color:#2563EB;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+        Why This Matters
+      </div>
+      <h2>Most Companies Stop at Basic DDoS Protection</h2>
+      <p>Enabling standard protection and calling it done is common. But sophisticated Layer 7 attacks require engineered solutions. Here's what we built differently:</p>
+
+      <div class="cs-why-list">
+        <div class="cs-why-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Metric-driven attack detection using AWS load balancer telemetry
+        </div>
+        <div class="cs-why-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          API-triggered defense activation via Cloudflare automation
+        </div>
+        <div class="cs-why-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Priority-based WAF rule engineering with Terraform
+        </div>
+        <div class="cs-why-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Terraform-managed, version-controlled cloud security
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cs-section" style="padding-bottom:100px;">
+    <div class="cs-cta cs-animate">
+      <h2>Is Your Cloud Truly Protected?</h2>
+      <p>We engineer resilient, automated systems designed to withstand real-world attack patterns. Security isn't an add-on &mdash; it's architecture.</p>
+      <a href="https://bit.ly/bicoftreview" target="_blank" class="cs-cta-btn">
+        Get a Free Security Review
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div class="cs-footer">
+    <p>&copy; 2026 <a href="../index.html">Bicoft</a>. All rights reserved.</p>
+  </div>
+
+  <script>
+    // Scroll-based reveal animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.cs-animate').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
