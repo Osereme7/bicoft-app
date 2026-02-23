@@ -119,7 +119,7 @@ ul, ol { list-style: none; }
 .loader-icon {
   height: 60px;
   width: auto;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1) brightness(2);
   animation: loaderBounce 1.2s ease-in-out infinite;
 }
 
