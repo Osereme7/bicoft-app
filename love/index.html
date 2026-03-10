@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For You, Olachi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rose: #C9A0A0;
+      --blush: #E8D5D0;
+      --gold: #C9A227;
+      --gold-light: #E8D5A0;
+      --cream: #FFF9F5;
+      --deep: #2C1810;
+      --warm: #5C3D2E;
+      --text: #3D2B1F;
+      --soft: #8B7355;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* --- Loading / Entrance --- */
+    .entrance {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--deep);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    .entrance.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .entrance-heart {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 30px;
+      animation: heartbeat 1.5s ease infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      15% { transform: scale(1.15); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.1); }
+    }
+
+    .entrance h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .entrance p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: fadeInUp 1s ease 0.5s both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Floating petals --- */
+    .petals {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -40px;
+      width: 12px;
+      height: 16px;
+      background: radial-gradient(ellipse, rgba(201, 160, 160, 0.6), rgba(232, 213, 208, 0.3));
+      border-radius: 50% 0 50% 50%;
+      animation: fall linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes fall {
+      0% { opacity: 0; transform: translateY(-20px) rotate(0deg) translateX(0); }
+      10% { opacity: 0.7; }
+      90% { opacity: 0.5; }
+      100% { opacity: 0; transform: translateY(100vh) rotate(360deg) translateX(80px); }
+    }
+
+    .petal:nth-child(1) { left: 5%; animation-duration: 8s; animation-delay: 0s; }
+    .petal:nth-child(2) { left: 15%; animation-duration: 10s; animation-delay: 1.5s; width: 10px; height: 13px; }
+    .petal:nth-child(3) { left: 30%; animation-duration: 9s; animation-delay: 3s; }
+    .petal:nth-child(4) { left: 45%; animation-duration: 11s; animation-delay: 0.5s; width: 14px; height: 18px; }
+    .petal:nth-child(5) { left: 60%; animation-duration: 8.5s; animation-delay: 2s; }
+    .petal:nth-child(6) { left: 75%; animation-duration: 10.5s; animation-delay: 4s; width: 10px; height: 13px; }
+    .petal:nth-child(7) { left: 88%; animation-duration: 9.5s; animation-delay: 1s; }
+    .petal:nth-child(8) { left: 50%; animation-duration: 12s; animation-delay: 5s; }
+
+    /* --- Hero --- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      background: linear-gradient(180deg, var(--deep) 0%, #3D2B1F 50%, #5C3D2E 100%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 40%, rgba(201, 162, 39, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 70%, rgba(201, 160, 160, 0.06) 0%, transparent 40%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .hero-for {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: rgba(201, 162, 39, 0.6);
+      margin-bottom: 20px;
+    }
+
+    .hero-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(4rem, 10vw, 7rem);
+      color: var(--gold);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-shadow: 0 0 60px rgba(201, 162, 39, 0.2);
+    }
+
+    .hero-line {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 25px;
+    }
+
+    .hero-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.25);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* --- Sections --- */
+    .section {
+      padding: 100px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--deep);
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 40px;
+    }
+
+    /* --- Photo Gallery --- */
+    .gallery-bg {
+      background: linear-gradient(180deg, var(--cream) 0%, #F5EDE8 100%);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      background: linear-gradient(135deg, #E8D5D0, #D4C0B8);
+    }
+
+    .gallery-item:first-child {
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(44, 24, 16, 0.3) 100%);
+      pointer-events: none;
+    }
+
+    /* --- Words section --- */
+    .words-bg {
+      background: var(--deep);
+      padding: 100px 24px;
+    }
+
+    .words-bg .section-label { color: var(--gold-light); }
+    .words-bg h2 { color: #fff; }
+    .words-bg .section-divider { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+    .words-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      gap: 0;
+    }
+
+    .word-card {
+      padding: 32px 40px;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .word-card:hover {
+      background: rgba(201, 162, 39, 0.03);
+    }
+
+    .word-card:last-child {
+      border-bottom: none;
+    }
+
+    .word-card p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.7;
+      text-align: center;
+      font-weight: 300;
+    }
+
+    .word-card p::before {
+      content: '\201C';
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      margin-right: 4px;
+      line-height: 0;
+      vertical-align: -0.3em;
+    }
+
+    .word-card p::after {
+      content: '\201D';
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      margin-left: 4px;
+      line-height: 0;
+      vertical-align: -0.3em;
+    }
+
+    /* --- About her --- */
+    .about-bg {
+      background: linear-gradient(180deg, #F5EDE8 0%, var(--cream) 100%);
+    }
+
+    .about-content {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .about-content p {
+      font-size: 1.25rem;
+      line-height: 1.9;
+      color: var(--warm);
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .about-content p strong {
+      color: var(--deep);
+      font-weight: 600;
+    }
+
+    /* --- Her worth --- */
+    .worth-bg {
+      background: linear-gradient(135deg, #2C1810, #3D2B1F);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .worth-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(201, 162, 39, 0.05), transparent 60%);
+    }
+
+    .worth-bg .section-label { color: var(--gold-light); }
+    .worth-bg h2 { color: #fff; position: relative; }
+    .worth-bg .section-divider { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+    .worth-list {
+      max-width: 600px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+      position: relative;
+    }
+
+    .worth-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 28px;
+      border: 1px solid rgba(201, 162, 39, 0.15);
+      border-radius: 12px;
+      background: rgba(201, 162, 39, 0.03);
+      transition: all 0.3s ease;
+    }
+
+    .worth-item:hover {
+      background: rgba(201, 162, 39, 0.06);
+      transform: translateX(4px);
+    }
+
+    .worth-item svg {
+      width: 20px;
+      height: 20px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .worth-item span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 400;
+    }
+
+    /* --- Conversations --- */
+    .convos-bg {
+      background: var(--cream);
+    }
+
+    .convo-bubbles {
+      max-width: 550px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .bubble {
+      padding: 16px 24px;
+      border-radius: 20px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      max-width: 80%;
+      font-weight: 400;
+    }
+
+    .bubble.him {
+      background: var(--deep);
+      color: rgba(255,255,255,0.85);
+      border-bottom-right-radius: 6px;
+      align-self: flex-end;
+    }
+
+    .bubble.her {
+      background: #E8D5D0;
+      color: var(--deep);
+      border-bottom-left-radius: 6px;
+      align-self: flex-start;
+    }
+
+    .bubble-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 4px;
+    }
+
+    .bubble-label.right { text-align: right; }
+
+    /* --- Feature photo --- */
+    .feature-photo {
+      width: 100%;
+      max-width: 600px;
+      margin: 50px auto 0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(44, 24, 16, 0.15);
+    }
+
+    .feature-photo img {
+      width: 100%;
+      display: block;
+    }
+
+    /* --- Final section --- */
+    .final-bg {
+      background: linear-gradient(180deg, var(--deep), #1a0f0a);
+      text-align: center;
+      padding: 120px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(201, 162, 39, 0.06), transparent 50%);
+    }
+
+    .final-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .final-content .hero-name {
+      font-size: clamp(3rem, 7vw, 5rem);
+      margin-bottom: 25px;
+    }
+
+    .final-message {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 2;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      font-weight: 300;
+    }
+
+    .final-heart {
+      display: inline-block;
+      animation: heartbeat 1.5s ease infinite;
+    }
+
+    .final-heart svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .final-sig {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      color: var(--gold);
+      margin-top: 40px;
+    }
+
+    /* --- Scroll reveal --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .gallery-item:first-child {
+        grid-row: span 1;
+        aspect-ratio: 4/5;
+      }
+      .bubble { max-width: 90%; }
+      .word-card { padding: 24px 20px; }
+      .section { padding: 70px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Entrance screen -->
+  <div class="entrance" id="entrance">
+    <div class="entrance-heart">
+      <svg viewBox="0 0 24 24" fill="rgba(201,162,39,0.8)" stroke="none">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/>
+      </svg>
+    </div>
+    <h2>For You, My Love</h2>
+    <p>Tap to open</p>
+  </div>
+
+  <!-- Floating petals -->
+  <div class="petals">
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-for">A letter written in code &amp; love</div>
+      <h1 class="hero-name">Olachi</h1>
+      <div class="hero-line"></div>
+      <p class="hero-quote">You are worth far more than rubies.<br>Everything I build, I build with you in mind.</p>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M4 9l4 4 4-4"/></svg>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery-bg">
+    <div class="section">
+      <div class="section-label reveal">Our Moments</div>
+      <h2 class="reveal">Every Moment With You Is a Memory I Keep</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="gallery-grid reveal">
+        <div class="gallery-item">
+          <!-- Selfie of her (glamour shot) -->
+          <img src="images/olachi-4.jpg" alt="Olachi">
+        </div>
+        <div class="gallery-item">
+          <!-- Together selfie -->
+          <img src="images/olachi-1.jpg" alt="Together">
+        </div>
+        <div class="gallery-item">
+          <!-- Together at event -->
+          <img src="images/olachi-3.jpg" alt="Together at event">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Words for her -->
+  <section class="words-bg">
+    <div class="section-label reveal">Things I Mean</div>
+    <h2 class="reveal" style="text-align:center;">Words From My Heart</h2>
+    <div class="section-divider reveal"></div>
+
+    <div class="words-grid reveal">
+      <div class="word-card"><p>You always know how to make me smile.</p></div>
+      <div class="word-card"><p>I love the way you make me feel.</p></div>
+      <div class="word-card"><p>You're such a wonderful person.</p></div>
+      <div class="word-card"><p>I appreciate you so much.</p></div>
+      <div class="word-card"><p>You make every day better.</p></div>
+      <div class="word-card"><p>I'm so lucky to have you.</p></div>
+      <div class="word-card"><p>You're amazing just as you are.</p></div>
+      <div class="word-card"><p>I love being around you.</p></div>
+      <div class="word-card"><p>You have a heart of gold.</p></div>
+      <div class="word-card"><p>You make life sweeter.</p></div>
+    </div>
+  </section>
+
+  <!-- About her -->
+  <section class="about-bg">
+    <div class="section">
+      <div class="section-label reveal">Understanding Your Worth</div>
+      <h2 class="reveal">You Are More Than You Know</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="about-content reveal">
+        <p>You deserve a man that <strong>loves the Lord</strong>. A man that loves you with everything he has. A man that will <strong>take care of you</strong> and treat you like an egg &mdash; with gentleness, protection, and care.</p>
+        <p>You deserve <strong>good looks and style</strong>, a kind man, someone who shows up. You deserve <strong>reassurance</strong>, <strong>affection</strong>, and someone who never lets you question where you stand.</p>
+        <p>I notice the little things about you &mdash; the way <strong>Zara Amber Fusion</strong> smells on your skin, evenings at <strong>Ajayeeb Dubai</strong>, and how you light up every room you walk into.</p>
+        <p>You deserve all of that. And I intend to be all of that.</p>
+      </div>
+
+      <!-- Feature photo -->
+      <div class="feature-photo reveal">
+        <img src="images/olachi-2.jpg" alt="Olachi at dinner">
+      </div>
+    </div>
+  </section>
+
+  <!-- Little conversations -->
+  <section class="convos-bg">
+    <div class="section">
+      <div class="section-label reveal">Little Moments</div>
+      <h2 class="reveal">The Things We Say</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="convo-bubbles reveal">
+        <div class="bubble-label right">Osereme</div>
+        <div class="bubble him">This dress pls wear it for one of our dates, it's so beautiful.</div>
+        <div class="bubble-label">Olachi</div>
+        <div class="bubble her">Thank you and noted</div>
+
+        <div style="height: 20px;"></div>
+
+        <div class="bubble-label right">Osereme</div>
+        <div class="bubble him">You're so beautiful my princess.</div>
+        <div class="bubble-label">Olachi</div>
+        <div class="bubble her">Thankkk youuu 🥰</div>
+
+        <div style="height: 20px;"></div>
+
+        <div class="bubble-label right">Osereme</div>
+        <div class="bubble him">Are you okay, do you need anything? Water? Reassurance?</div>
+        <div class="bubble-label">Olachi</div>
+        <div class="bubble her">Lool I need sleep</div>
+
+        <div style="height: 20px;"></div>
+
+        <div class="bubble-label right">Osereme</div>
+        <div class="bubble him">Money? Assurance? Affection?</div>
+        <div class="bubble-label">Olachi</div>
+        <div class="bubble her">All of the above please 😌</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Her worth (what she wants) -->
+  <section class="worth-bg">
+    <div class="section">
+      <div class="section-label reveal">A Promise</div>
+      <h2 class="reveal">What You Deserve, I Will Be</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="worth-list reveal">
+        <div class="worth-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          <span>A man that loves the Lord</span>
+        </div>
+        <div class="worth-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          <span>A man that loves you wholeheartedly</span>
+        </div>
+        <div class="worth-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          <span>A man that will take care of you &mdash; always</span>
+        </div>
+        <div class="worth-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          <span>Treat you like an egg &mdash; gently, carefully, preciously</span>
+        </div>
+        <div class="worth-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          <span>A kind man with style</span>
+        </div>
+        <div class="worth-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          <span>Reassurance, affection, and presence &mdash; every single day</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final -->
+  <section class="final-bg">
+    <div class="final-content reveal">
+      <div class="hero-for" style="margin-bottom:30px;">Forever &amp; Always</div>
+      <h1 class="hero-name">Olachi</h1>
+      <div class="hero-line"></div>
+      <p class="final-message">
+        From Ajayeeb Dubai, to the scent of your Zara Amber Fusion,
+        to wherever life takes us &mdash;
+        I choose you. Not just today, but every day after this.
+        You are my person. My peace. My answered prayer.
+      </p>
+      <div class="final-heart">
+        <svg viewBox="0 0 24 24" fill="rgba(201,162,39,0.7)" stroke="none">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/>
+        </svg>
+      </div>
+      <div class="final-sig">With all my love, Osereme</div>
+    </div>
+  </section>
+
+  <script>
+    // Entrance screen
+    document.getElementById('entrance').addEventListener('click', function() {
+      this.classList.add('hidden');
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
