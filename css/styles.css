@@ -2055,3 +2055,51 @@ ul, ol { list-style: none; }
 .footer-socials{display:flex;gap:12px;margin-top:16px}
 .footer-socials a{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);color:var(--gray-400);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .footer-socials a:hover{background:var(--primary);color:#fff}
+
+/* --- Back to Top Button --- */
+.back-to-top{position:fixed;bottom:24px;right:24px;z-index:900;width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);opacity:0;visibility:hidden;transform:translateY(12px);transition:all .3s ease}
+.back-to-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.back-to-top:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:var(--shadow-xl)}
+.back-to-top svg{width:20px;height:20px}
+
+/* --- WhatsApp Button --- */
+.whatsapp-btn{position:fixed;bottom:80px;right:24px;z-index:900;width:52px;height:52px;border-radius:50%;background:#25D366;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.35);transition:all .3s ease;text-decoration:none}
+.whatsapp-btn:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(37,211,102,.45)}
+.whatsapp-btn svg{width:26px;height:26px}
+.whatsapp-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.4);opacity:0}}
+
+/* --- Tech Stack / Trust Section --- */
+.tech-stack{padding:60px 0;background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200)}
+.tech-stack .section-tag{display:block;text-align:center;margin-bottom:24px}
+.tech-logos{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:32px 48px;max-width:900px;margin:0 auto}
+.tech-logo{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.55;transition:opacity .3s ease}
+.tech-logo:hover{opacity:1}
+.tech-logo svg{width:40px;height:40px}
+.tech-logo span{font-family:var(--font-primary);font-size:.7rem;font-weight:600;color:var(--gray-500);letter-spacing:.5px;text-transform:uppercase}
+@media(max-width:600px){.tech-logos{gap:24px 32px}.tech-logo svg{width:32px;height:32px}}
+
+/* --- FAQ Section --- */
+.faq{background:var(--white)}
+.faq-grid{max-width:760px;margin:0 auto;display:grid;gap:0}
+.faq-item{border-bottom:1px solid var(--gray-200)}
+.faq-item:last-child{border-bottom:none}
+.faq-question{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--gray-900);transition:color .2s ease}
+.faq-question:hover{color:var(--primary)}
+.faq-question svg{width:20px;height:20px;flex-shrink:0;color:var(--gray-400);transition:transform .3s ease}
+.faq-item.open .faq-question svg{transform:rotate(180deg);color:var(--primary)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+.faq-item.open .faq-answer{max-height:300px;padding-bottom:20px}
+.faq-answer p{font-size:.95rem;color:var(--gray-600);line-height:1.7}
+
+/* --- Newsletter (Blog) --- */
+.newsletter-section{background:linear-gradient(135deg,var(--primary-900),var(--primary));padding:60px 24px;text-align:center;color:#fff}
+.newsletter-section h3{font-family:var(--font-display);font-size:1.5rem;font-weight:700;margin-bottom:8px}
+.newsletter-section p{font-size:.95rem;opacity:.8;margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto}
+.newsletter-form{display:flex;gap:10px;max-width:460px;margin:0 auto}
+.newsletter-form input{flex:1;padding:12px 16px;border-radius:var(--radius-md);border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:.9rem;font-family:var(--font-primary);outline:none;transition:border-color .2s ease}
+.newsletter-form input::placeholder{color:rgba(255,255,255,.5)}
+.newsletter-form input:focus{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.15)}
+.newsletter-form button{padding:12px 24px;border-radius:var(--radius-md);border:none;background:#fff;color:var(--primary);font-family:var(--font-primary);font-size:.85rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s ease}
+.newsletter-form button:hover{background:var(--gray-100);transform:translateY(-1px)}
+@media(max-width:500px){.newsletter-form{flex-direction:column}.newsletter-form button{width:100%}}

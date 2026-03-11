@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('scroll', updateActiveNav);
 
-  // --- Contact form ---
+  // --- Contact form (Formspree) ---
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
     contactForm.addEventListener('submit', function (e) {
@@ -213,23 +213,55 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       btn.disabled = true;
 
-      // Simulate form submission
-      setTimeout(() => {
-        btn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M5 10L9 14L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Message Sent!
-        `;
-        btn.style.background = '#10B981';
+      const formData = new FormData(this);
 
+      fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      }).then(response => {
+        if (response.ok) {
+          btn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 10L9 14L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Message Sent!
+          `;
+          btn.style.background = '#10B981';
+          contactForm.reset();
+        } else {
+          btn.innerHTML = 'Error - Try Again';
+          btn.style.background = '#EF4444';
+        }
         setTimeout(() => {
           btn.innerHTML = originalText;
           btn.style.background = '';
           btn.disabled = false;
-          contactForm.reset();
         }, 3000);
-      }, 1500);
+      }).catch(() => {
+        btn.innerHTML = 'Error - Try Again';
+        btn.style.background = '#EF4444';
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3000);
+      });
+    });
+  }
+
+  // --- Back to top button ---
+  const backToTop = document.getElementById('backToTop');
+  if (backToTop) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 600) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
