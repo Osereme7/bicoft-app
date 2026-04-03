@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Naomi - A Friendship Tribute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 25%, #e8f5e9 50%, #c8e6c9 75%, #f8bbd0 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #4a4a4a;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating hearts */
+        .floating-hearts {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 1.5rem;
+            animation: floatUp linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+            50% { opacity: 0.7; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .heart:nth-child(1) { left: 5%; animation-duration: 8s; animation-delay: 0s; font-size: 1.2rem; }
+        .heart:nth-child(2) { left: 15%; animation-duration: 10s; animation-delay: 1s; font-size: 1.8rem; }
+        .heart:nth-child(3) { left: 25%; animation-duration: 7s; animation-delay: 3s; font-size: 1rem; }
+        .heart:nth-child(4) { left: 35%; animation-duration: 11s; animation-delay: 2s; font-size: 2rem; }
+        .heart:nth-child(5) { left: 45%; animation-duration: 9s; animation-delay: 4s; font-size: 1.4rem; }
+        .heart:nth-child(6) { left: 55%; animation-duration: 8s; animation-delay: 1.5s; font-size: 1.6rem; }
+        .heart:nth-child(7) { left: 65%; animation-duration: 12s; animation-delay: 0.5s; font-size: 1.1rem; }
+        .heart:nth-child(8) { left: 75%; animation-duration: 9s; animation-delay: 3.5s; font-size: 1.9rem; }
+        .heart:nth-child(9) { left: 85%; animation-duration: 7s; animation-delay: 2.5s; font-size: 1.3rem; }
+        .heart:nth-child(10) { left: 92%; animation-duration: 10s; animation-delay: 1.2s; font-size: 1.5rem; }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .hero h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #e91e63;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(233, 30, 99, 0.15);
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #2e7d32;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            color: #f48fb1;
+            font-size: 0.9rem;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            height: 1px;
+            width: 80px;
+            background: linear-gradient(to right, transparent, #f48fb1, transparent);
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 45px 40px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 32px rgba(233, 30, 99, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #e91e63;
+            margin-bottom: 20px;
+        }
+
+        .card p {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: #555;
+            font-weight: 300;
+        }
+
+        .card.green-accent {
+            border-left: 4px solid #66bb6a;
+        }
+
+        .card.pink-accent {
+            border-left: 4px solid #f48fb1;
+        }
+
+        /* Qualities */
+        .qualities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .quality-item {
+            background: linear-gradient(135deg, #fce4ec, #e8f5e9);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .quality-item:hover {
+            transform: scale(1.05);
+        }
+
+        .quality-item .icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .quality-item h3 {
+            font-size: 1.1rem;
+            color: #2e7d32;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .quality-item p {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* Quote */
+        .quote-block {
+            background: linear-gradient(135deg, #e91e63, #ec407a);
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-block::before {
+            content: '\201C';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 10rem;
+            font-family: 'Dancing Script', cursive;
+            opacity: 0.15;
+            color: white;
+        }
+
+        .quote-block p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Letter */
+        .letter {
+            background: #fffdf7;
+            border: 2px dashed #f48fb1;
+            border-radius: 20px;
+            padding: 45px 40px;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .letter::before {
+            content: 'A little letter for you...';
+            position: absolute;
+            top: -14px;
+            left: 30px;
+            background: #fffdf7;
+            padding: 0 12px;
+            font-family: 'Dancing Script', cursive;
+            color: #e91e63;
+            font-size: 1.1rem;
+        }
+
+        .letter p {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: #555;
+            font-weight: 300;
+        }
+
+        .letter .signature {
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            color: #2e7d32;
+            margin-top: 25px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 50px 20px 40px;
+        }
+
+        .footer .hearts-row {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            letter-spacing: 8px;
+        }
+
+        .footer p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            color: #e91e63;
+        }
+
+        .footer .year {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 10px;
+            font-weight: 300;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero .subtitle { font-size: 1rem; }
+            .card { padding: 30px 25px; }
+            .quote-block { padding: 35px 25px; }
+            .quote-block p { font-size: 1.4rem; }
+            .letter { padding: 35px 25px; }
+            .qualities { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts">
+        <div class="heart">&#x1F338;</div>
+        <div class="heart">&#x1F49A;</div>
+        <div class="heart">&#x1F33C;</div>
+        <div class="heart">&#x1F49B;</div>
+        <div class="heart">&#x1F338;</div>
+        <div class="heart">&#x1F33F;</div>
+        <div class="heart">&#x1F49A;</div>
+        <div class="heart">&#x1F338;</div>
+        <div class="heart">&#x1F33C;</div>
+        <div class="heart">&#x1F49A;</div>
+    </div>
+
+    <div class="container">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-icon">&#x1F338;&#x1F49A;&#x1F338;</div>
+            <h1>For Naomi</h1>
+            <p class="subtitle">A Celebration of Friendship</p>
+        </section>
+
+        <!-- Intro -->
+        <div class="card pink-accent">
+            <h2>Where Do I Even Begin?</h2>
+            <p>
+                Some people walk into your life and leave footprints on your heart forever.
+                Naomi, you are one of those rare, beautiful souls. From the very first moment
+                our paths crossed, I knew there was something genuinely special about you &mdash;
+                a warmth, a kindness, a light that just makes everything around you brighter.
+            </p>
+        </div>
+
+        <div class="divider">&#x2727;</div>
+
+        <!-- Qualities Grid -->
+        <div class="card green-accent">
+            <h2>What Makes Naomi So Special</h2>
+            <div class="qualities">
+                <div class="quality-item">
+                    <div class="icon">&#x1F49B;</div>
+                    <h3>Kindness</h3>
+                    <p>Your kindness isn't performative &mdash; it's woven into everything you do. You care deeply and it shows.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="icon">&#x2728;</div>
+                    <h3>Goodness</h3>
+                    <p>You are genuinely, deeply good. The kind of good that restores people's faith in others.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="icon">&#x1F31F;</div>
+                    <h3>Supportive</h3>
+                    <p>You show up &mdash; not just when it's easy, but when it matters most. That means the world.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="icon">&#x1F33F;</div>
+                    <h3>Genuine</h3>
+                    <p>In a world full of pretence, you are refreshingly real. What you see is what you get, and it's wonderful.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="icon">&#x2615;</div>
+                    <h3>Thoughtful</h3>
+                    <p>You remember the little things, check in when no one else does, and make people feel truly seen.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="icon">&#x1F338;</div>
+                    <h3>Joyful</h3>
+                    <p>Your energy is infectious. Being around you feels like the sun just came out on a cloudy day.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote -->
+        <div class="quote-block">
+            <p>True friendship is not about being inseparable &mdash; it's about being separated and nothing changes. And with you, Naomi, nothing ever will.</p>
+        </div>
+
+        <!-- How Good She Is -->
+        <div class="card pink-accent">
+            <h2>How Good You Are to Me</h2>
+            <p>
+                Naomi, I don't think you realise just how much you mean to me. You have been there
+                through the highs and the lows, the laughter and the quiet moments. You listen without
+                judgement, you encourage without hesitation, and you love without conditions.
+            </p>
+            <br>
+            <p>
+                You've shown me what real friendship looks like &mdash; the kind that doesn't keep
+                score, the kind that just gives. Every conversation with you leaves me feeling lighter,
+                every memory we share is one I treasure. You make me want to be a better person,
+                and that's the most beautiful gift anyone can give.
+            </p>
+        </div>
+
+        <div class="divider">&#x2727;</div>
+
+        <!-- Letter -->
+        <div class="letter">
+            <p>
+                Dear Naomi,
+            </p>
+            <br>
+            <p>
+                I made this little page because sometimes words said in passing don't carry
+                the weight they deserve. So here it is, written down and permanent:
+            </p>
+            <br>
+            <p>
+                I love you. I appreciate you. I thank God for you.
+            </p>
+            <br>
+            <p>
+                You are kind when the world gives you every reason not to be.
+                You are good when no one is watching.
+                You are a gift to everyone who gets to call you a friend &mdash;
+                and I'm incredibly lucky to be one of them.
+            </p>
+            <br>
+            <p>
+                Here's to many more years of friendship, laughter, and memories.
+                You deserve the entire world, and I'll always be cheering you on.
+            </p>
+            <p class="signature">With love always, Osereme &#x1F49A;</p>
+        </div>
+
+        <!-- Footer -->
+        <section class="footer">
+            <div class="hearts-row">&#x1F338; &#x1F49A; &#x1F338; &#x1F49A; &#x1F338;</div>
+            <p>Forever grateful for you, Naomi</p>
+            <p class="year">Made with love &bull; 2026</p>
+        </section>
+    </div>
+</body>
+</html>
